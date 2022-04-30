@@ -1,0 +1,1 @@
+npm[{"id":1,"title":"Coastal Chair","price":250.5,"thumbnail":"https://res.cloudinary.com/dovuoehfu/image/upload/v1648905170/Product-Images/coastal-outdoor-swivel-chair-1-z_b8ylt1.jpg"}]
