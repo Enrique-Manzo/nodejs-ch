@@ -120,7 +120,7 @@ const connectedServer = server.listen(8080, ()=> {
 
 const app = express();
 
-app.get("/", (req, res) => {
+app.get("/productos", (req, res) => {
 
     contenedor.loadProducts()
     .then(()=> contenedor.save(wallRack))
