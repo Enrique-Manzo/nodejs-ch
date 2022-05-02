@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "express": "^4.18.1",
     "moment": "^2.29.3"
   },
   "name": "backend",
@@ -10,8 +11,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js",
-    "start:dev": "nodemon main.js"
+    "start": "node appArchivo.js",
+    "start:dev": "nodemon appArchivo.js"
   },
   "keywords": [],
   "author": "",

@@ -1,4 +1,6 @@
 const fs = require("fs");
+const http = require("http")
+const express = require("express");
 
 const fileRoute = "products.txt";
 
@@ -95,6 +97,7 @@ const wallRack = new Producto (3, "Wall Rack", 321, "https://res.cloudinary.com/
 
 
 // Cargar productos
+/*
 contenedor.loadProducts()
 .then(()=> {console.log(contenedor.productList)})
 .then(() => contenedor.save(wallRack)) // guardar productos
@@ -103,3 +106,37 @@ contenedor.loadProducts()
 .then(() => console.log(contenedor.getAll())) // Retornar todos
 .then(() => contenedor.deleteById(3).then(()=> console.log(contenedor.productList))) // Borrar según el ID
 .then(() => contenedor.deleteAll()) // Borrar todos
+*/
+
+/*
+const server = http.createServer((req, resp) => {
+    resp.end("Hola Mundo");
+})
+
+const connectedServer = server.listen(8080, ()=> {
+    console.log(`Server running on port ${connectedServer.address().port}`)
+})
+*/
+
+const app = express();
+
+app.get("/", (req, res) => {
+
+    contenedor.loadProducts()
+    .then(()=> contenedor.save(wallRack))
+    .then(()=> contenedor.save(armoire))
+    .then(()=> contenedor.save(chair))
+    .then(()=> res.send(contenedor.productList.map(product => `<p>${product.title}: ${product.thumbnail}</p>`).join(``)))
+
+    
+})
+app.get("/productoRandom", (req, res)=>{
+    contenedor.loadProducts()
+    .then(()=> res.send(`${contenedor.productList[Math.floor(Math.random() * contenedor.productList.length)].title}`))
+})
+
+const server = app.listen(8080, ()=>{
+    console.log(`Server listening on port ${server.address().port}`)
+});
+
+server.on("error", error => console.log(`Server error ${error}`));
