@@ -1,0 +1,30 @@
+section(class="shop_section layout_padding")
+      div(class="container")
+        div(class="heading_container heading_center")
+          h2="Latest Watches"
+        div(class="row")
+            each watch in watches
+                if watch.featured
+                    div(class="col-md-6")
+                        div(class="box")
+                            a(href="")
+                                div(class="img-box")
+                                    img(src=watch.image alt="")
+                                div(class="detail-box")
+                                    h6="Smartwatch"
+                                    h6="Price:"
+                                        span $#{watch.price}  
+                                    div(class="new")
+                                        span #{watch.tag}
+                else
+                    div(class="col-sm-6 col-xl-3")
+                        div(class="box")
+                            a(href="")
+                                div(class="img-box")
+                                    img(src=watch.image alt="")
+                                div(class="detail-box")
+                                    h6="Smartwatch"
+                                    h6="Price:"
+                                        span $#{watch.price}  
+                                    div(class="new")
+                                        span #{watch.tag}
