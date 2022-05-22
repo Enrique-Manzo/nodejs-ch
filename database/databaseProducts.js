@@ -1,4 +1,3 @@
-const res = require("express/lib/response");
 const fs = require("fs");
 const fileRoute = "products.txt";
 

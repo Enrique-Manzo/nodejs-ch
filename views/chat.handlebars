@@ -1,0 +1,28 @@
+<span class="sub_page">
+{{> header}}
+
+  <!-- contact section -->
+
+  <section class="mb-5 d-flex justify-content-center">
+    <div class="chat_wrapper">
+      <h1>Client chat</h1>
+      <h3>Exchange a few words with other clients</h3>
+      <div id="chat_messages_wrapper">
+        <ul id="messages_list">
+
+        </ul>
+      </div>
+      <form class="contact_section chat_credentials">
+        <label for="message">Message</label>
+        <input type="text" name="message" id="user_message">
+        <label for="email">Email address</label>
+        <input type="email" name="email" id="user_email">
+        <button type="button" id="btn_send">SEND</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- end contact section -->
+{{> footer}}
+{{> scripts}}
+</span>
