@@ -2,7 +2,6 @@ const fs = require("fs");
 const fileRoute = "./messages.txt";
 
 async function addMessage(messages) {
-    console.log(messages)
     const jsonMessages = JSON.stringify(messages)
     await fs.promises.writeFile(fileRoute, jsonMessages, {encoding:"utf-8", flag:"w"});
 };

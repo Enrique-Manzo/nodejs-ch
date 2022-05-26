@@ -7,6 +7,7 @@ const routerWeb = require("./routers/routerWeb.js");
 const routerAPI = require("./routers/routerAPI.js");
 const { engine } = require("express-handlebars");
 const { getMessages, addMessage } = require("./database/messages.js");
+const watches = require("./database/watches.js");
 
 // PATHS
 const path = require('path');
@@ -25,7 +26,6 @@ io.on("connection", (socket)=> {
     
     getMessages()
     .then((messages)=>{
-        console.log(messages)
         socket.emit("conexionOK", {messages: messages})
     })
     
@@ -45,8 +45,21 @@ io.on("connection", (socket)=> {
         .then((allMessages)=>{
             io.sockets.emit("conexionOK", { messages: allMessages })
         })
-
     })
+    
+    socket.on("requestWatchesData", (data)=>{
+        const newWatch = {
+            name: data.name,
+            price: data.price,
+            tag: data.tag,
+            image: data.image
+        }
+        watches.push(newWatch)
+        socket.emit("watchesData", {watches: watches})
+    })
+
+    socket.emit("watchesData", {watches: watches})
+    
 })
 
 // APP SETTINGS
