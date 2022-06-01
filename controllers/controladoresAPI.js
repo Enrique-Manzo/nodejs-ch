@@ -1,4 +1,4 @@
-const { contenedor } = require("../database/databaseProducts.js");
+import contenedor from "../database/databaseProducts.js";
 
 const controladoresAPI = {
     
@@ -65,4 +65,4 @@ const controladoresAPI = {
     }
 };
 
-module.exports = {controladoresAPI};
+export default controladoresAPI;

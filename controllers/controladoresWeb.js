@@ -1,4 +1,4 @@
-const watches = require("../database/watches.js");
+import watches from "../database/watches.js";
 
 const controladoresWeb = {
     index: (req, res) => {res.render("main", {layout: "index", name: "Enrique", watches: watches})},
@@ -7,4 +7,4 @@ const controladoresWeb = {
     contact: (req, res) => {res.render("chat", {layout: "index"})}
 }
 
-module.exports = {controladoresWeb}
+export default controladoresWeb;

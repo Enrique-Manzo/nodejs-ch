@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const { controladoresWeb } = require("../controllers/controladoresWeb.js");
+import Router from "express";
+import controladoresWeb from "../controllers/controladoresWeb.js";
 
 const routerWeb = new Router()
 
@@ -8,4 +8,4 @@ routerWeb.get("/watches", controladoresWeb.watches)
 routerWeb.get("/about", controladoresWeb.about)
 routerWeb.get("/chat", controladoresWeb.contact)
 
-module.exports = routerWeb;
+export default routerWeb

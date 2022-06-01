@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 const fileRoute = "products.txt";
 
 class ContenedorArchivo {
@@ -145,9 +145,4 @@ class Producto {
 
 const contenedor = new ContenedorArchivo();
 
-
-const chair = new Producto(1, "Coastal Chair", 250.5, "https://res.cloudinary.com/dovuoehfu/image/upload/v1648905170/Product-Images/coastal-outdoor-swivel-chair-1-z_b8ylt1.jpg");
-const armoire = new Producto(2, "Classy Armoire", 854, "https://res.cloudinary.com/dovuoehfu/image/upload/v1648905171/Product-Images/mid-century-armoire-c_csjzem.jpg");
-const wallRack = new Producto (3, "Wall Rack", 321, "https://res.cloudinary.com/dovuoehfu/image/upload/v1648905171/Product-Images/mid-century-wall-rack-acorn-z_vehx6u.jpg");
-
-module.exports = {contenedor}
+export default contenedor

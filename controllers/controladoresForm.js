@@ -1,6 +1,6 @@
-const { contenedor } = require("../database/databaseProducts.js");
+import contenedor from "../database/databaseProducts.js";
 
-const controladoresForm = {
+export const controladoresForm = {
 
     postProduct: (req, res) => {
 
@@ -17,4 +17,3 @@ const controladoresForm = {
 
 }
 
-module.exports = { controladoresForm }

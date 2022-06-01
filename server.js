@@ -1,16 +1,18 @@
-const fs = require("fs");
-const {Server: HttpServer} = require("http")
-const express = require("express");
-const { Server: SocketServer } = require("socket.io");
-const { controladoresForm } = require("./controllers/controladoresForm.js");
-const routerWeb = require("./routers/routerWeb.js");
-const routerAPI = require("./routers/routerAPI.js");
-const { engine } = require("express-handlebars");
-const { getMessages, addMessage } = require("./database/messages.js");
-const watches = require("./database/watches.js");
+import express from "express";
+import { Server as SocketServer } from "socket.io";
+import {controladoresForm} from "./controllers/controladoresForm.js"
+import routerWeb from "./routers/routerWeb.js";
+import routerAPI from "./routers/routerAPI.js";
+import {engine} from "express-handlebars";
+import { getMessages, addMessage } from "./database/messages.js";
+import watches from "./database/watches.js";
+import {Server as HttpServer} from "http";
 
 // PATHS
-const path = require('path');
+import * as path from 'path'; //const path = require('path');
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const publicPath = path.resolve(__dirname, 'public');
 
 // APP
