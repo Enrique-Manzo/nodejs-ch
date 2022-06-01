@@ -126,7 +126,7 @@ class ContenedorCarrito {
 
         queriedCart.products = queriedCart.products.filter(product => product.id !== productID);
 
-        await this.deleteCart(cartID);
+        this.cartList = this.cartList.filter(cart => cart.id !== cartID)
 
         this.cartList.push(queriedCart);
 

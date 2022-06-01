@@ -62,7 +62,7 @@ const controladoresAPICarrito = {
         const idCarrito = parseInt(req.params.id);
         const idProducto = parseInt(req.params.id_prod);
 
-        controladoresAPICarrito.deleteCartProduct(idCarrito, idProducto)
+        contenedorCarrito.deleteCartProduct(idCarrito, idProducto)
         .then((cart)=>{
             res.status(200).json(cart)
         })
