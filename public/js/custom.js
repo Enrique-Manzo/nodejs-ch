@@ -82,9 +82,9 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
 
 if (window.location.href === "http://localhost:8080/chat") {
     socket.on("conexionOK", data => {
-        document.getElementById("messages_list").innerHTML = data.messages.map(message => `<li><strong class="chat_email">${message.user}</strong>
+        document.getElementById("messages_list").innerHTML = data.messages.map(message => `<li><strong class="chat_email">${message.chat_user}</strong>
         <span class="chat_date">${new Date().toLocaleString()}</span>:
-        <span class="chat_message">${message.text}</span></li>`).join("");
+        <span class="chat_message">${message.chat_text}</span></li>`).join("");
     })
 
 
@@ -95,7 +95,7 @@ if (window.location.href === "http://localhost:8080/chat") {
 
     btn.addEventListener("click", ()=>{
         if (userEmail.value.length > 1 &&  userEmail.value.includes("@")) {
-            socket.emit("message", {user: userEmail.value, text: userMessage.value})
+            socket.emit("message", {chat_user: userEmail.value, chat_text: userMessage.value})
             userMessage.value = "";
         }
     })

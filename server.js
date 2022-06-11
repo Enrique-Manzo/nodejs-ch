@@ -31,21 +31,11 @@ io.on("connection", (socket)=> {
         socket.emit("conexionOK", {messages: messages})
     })
     
-    socket.on("message", message=>{
+    socket.on("message", async (message)=>{
+        await addMessage(message)
         getMessages()
         .then((messages)=>{
-            const allMessages = messages
-            allMessages.push(message)
-            
-            return allMessages
-        })
-        .then((allMessages)=>{
-            addMessage(allMessages)
-
-            return allMessages
-        })
-        .then((allMessages)=>{
-            io.sockets.emit("conexionOK", { messages: allMessages })
+            io.sockets.emit("conexionOK", { messages: messages })
         })
     })
     

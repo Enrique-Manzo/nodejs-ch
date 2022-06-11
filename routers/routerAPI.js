@@ -5,7 +5,7 @@ import contenedorCarrito from "../database/databaseCarritos.js";
 
 const routerAPI = new Router();
 
-const admin = false;
+let admin = false;
 
 routerAPI.get("/login", (req, res)=>{admin=true; res.status(200).json({"message": "login successful"});})
 routerAPI.get("/logout", (req, res)=>{admin=false; res.status(200).json({"message": "logout successful"});})

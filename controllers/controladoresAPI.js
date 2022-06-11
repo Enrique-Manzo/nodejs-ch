@@ -1,66 +1,57 @@
 import contenedor from "../database/databaseProducts.js";
+import { SQLClientAdmin } from "../database/SQLClient.js";
+
 
 const controladoresAPI = {
     
-    getAllProducts: (req, res) => {
-        contenedor.loadProducts()
-        .then(()=> res.send(contenedor.productList.map(product => `<p>${product.title}: ${product.thumbnail}</p>`).join(``)))
+    getAllProducts: async (req, res) => {
+        const products = await SQLClientAdmin.select("*").from("watches")
+        res.json(products)
         },
     
-    getRandomProduct: (req, res)=>{
-        contenedor.loadProducts()
-        .then(()=> res.send(`${contenedor.productList[Math.floor(Math.random() * contenedor.productList.length)].title}`))
+    getRandomProduct: async (req, res)=>{
+        const products = await SQLClientAdmin.select("*").from("watches")
+        const randomProduct = products[Math.floor(Math.random() * products.length)]
+        res.json(randomProduct)
     },
 
-    getProductById: (req, res) => {
+    getProductById: async (req, res) => {
         
         const id = parseInt(req.params.id);
         
-        contenedor.getByID(id)
-        .then((resp) => res.json(resp))
-        .catch((err) => {
-            if (err.type === "item not found") {
-                res.status(404).json({error: err.message})
-                
-            } else {
-                res.status(500).json({error: "An error occurred, please check your ID or try a different one"})
-            }
-        })
+        const product = await SQLClientAdmin.select("*").from("watches").where({id: id})
+        
+        if (!product) {
+            res.json({"message": "item not found"})
+        } else {
+            res.json(product)
+        }
     },
 
-    postProduct: (req, res) => {
+    postProduct: async (req, res) => {
         
-        contenedor.addProduct(req.body)
-        .then((newProduct) =>{
+        const productData = req.body;
 
-            res.status(201).json(newProduct)
-        
-        })
-        .catch((err) => res.status(400).json(err.message))
+        const result = await SQLClientAdmin.insert(productData).into("watches");
+        res.json(result)
     },
 
-    deleteProduct: (req, res) => {
-        const id = req.params.id;
+    deleteProduct: async (req, res) => {
+        const id = parseInt(req.params.id);
+
+        await SQLClientAdmin.delete().from("watches").where({id: id});
        
-        contenedor.deleteById(parseInt(id))
-        .then(()=>res.send("Product removed successfully"))
-        .catch((err) => res.status(500).json({error: err.message}))
+        res.json({"message": "product deletion successful."})
+
     },
     
-    updateProduct: (req, res) => {
+    updateProduct: async (req, res) => {
         const id = parseInt(req.params.id);
         const data = req.body;
 
-        try {
-            contenedor.updateProduct(id, data)
-            .then((resp)=>res.status(200).json(resp))
-        } catch (err) {
-            if (err.type === "Not found in db") {
-                res.status(404).json({ error: error.message })
-            } else {
-                res.status(500).json({ error: error.message })
-            }
-        }
+        await SQLClientAdmin.update(data).from("watches").where({id: id})
+
+        res.json({"message": "Update successful."})
         
     }
 };

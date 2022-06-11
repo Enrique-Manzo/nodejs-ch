@@ -20,37 +20,37 @@
     "description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
   },
   {
-    "id": 1633901836225,
-    "name": "Amazfit",
+    "id": 1633901,
+    "watch_name": "Amazfit",
     "price": 38.17,
     "tag": "New",
     "image": "images/w3.png",
-    "featured": false,
+    "featured": 0,
     "stock": 20,
-    "description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
+    "watch_description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
   },
   {
     "id": 9053901836215,
-    "name": "Leelbox",
+    "watch_name": "Leelbox",
     "price": 22.99,
     "tag": "New",
     "image": "images/w4.png",
     "featured": false,
     "stock": 20,
-    "description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
+    "watch_description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
   },
   {
-    "id": 1653999836215,
-    "name": "Garmin vívomove 3S",
+    "id": 1653999,
+    "watch_name": "Garmin vívomove 3S",
     "price": 180,
     "tag": "New",
     "image": "images/w5.png",
     "featured": false,
     "stock": 20,
-    "description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
+    "watch_description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
   },
   {
-    "id": 1613501836215,
+    "id": 1613501,
     "name": "HUAWEI Watch",
     "price": 119,
     "tag": "New",
@@ -70,3 +70,4 @@
     "description": "Smartwatches come in many different sizes, designs, and they can vary greatly when it comes to features. Before making a buying decision, ask yourself whether you want a watch primarily for fitness and sleep tracking, or whether the style is your top priority. "
   }
 ]
+

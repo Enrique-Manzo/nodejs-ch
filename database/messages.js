@@ -1,14 +1,11 @@
-import fs from "fs";
-const fileRoute = "./messages.txt";
+import { SQLiteClient } from "./SQLClient.js";
 
 export async function addMessage(messages) {
-    const jsonMessages = JSON.stringify(messages)
-    await fs.promises.writeFile(fileRoute, jsonMessages, {encoding:"utf-8", flag:"w"});
+    await SQLiteClient.insert(messages).into("messages");
 };
 
 export async function getMessages() {
-    const data = await fs.promises.readFile(fileRoute);
-    const loadedMessages = JSON.parse(data)
-     
-    return loadedMessages
+    const data = await SQLiteClient.select("*").from("messages");
+    
+    return data
 }
