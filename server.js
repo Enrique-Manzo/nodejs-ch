@@ -5,7 +5,7 @@ import routerWeb from "./routers/routerWeb.js";
 import routerAPI from "./routers/routerAPI.js";
 import {engine} from "express-handlebars";
 import { getMessages, addMessage } from "./database/messages.js";
-import watches from "./database/watches.js";
+import { getWatches, addWatch } from "./database/watches.js";
 import {Server as HttpServer} from "http";
 
 // PATHS
@@ -39,18 +39,19 @@ io.on("connection", (socket)=> {
         })
     })
     
-    socket.on("requestWatchesData", (data)=>{
-        const newWatch = {
-            name: data.name,
-            price: data.price,
-            tag: data.tag,
-            image: data.image
-        }
-        watches.push(newWatch)
-        socket.emit("watchesData", {watches: watches})
+    socket.on("requestWatchesData", async (data)=>{
+        
+        await addWatch(data);
+        getWatches()
+        .then((watches)=>{
+            socket.emit("watchesData", {watches: watches})
+        })
     })
 
-    socket.emit("watchesData", {watches: watches})
+    getWatches()
+        .then((watches)=>{
+            socket.emit("watchesData", {watches: watches})
+        })
     
 })
 

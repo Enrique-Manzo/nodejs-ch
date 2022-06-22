@@ -27,11 +27,13 @@ const socket = io();
 // LIVE PRODUCTS
 
 if (window.location.href === "http://localhost:8080/watches" || window.location.href === "http://localhost:8080/") {
-
+    Handlebars.registerHelper('isFeatured', function (featured) {
+        return featured == "Featured";
+      });
     socket.on("watchesData", data => {
         console.log("listening")
         const htmlString = `{{#each watches}}
-        <div class="{{#if this.featured}}col-md-6 {{else}}col-sm-6 col-xl-3{{/if}}">
+        <div class="{{#if (isFeatured this.tag)}}col-md-6 {{else}}col-sm-6 col-xl-3{{/if}}">
         <div class="box">
             <a>
             <div class="img-box">
@@ -39,7 +41,7 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
             </div>
             <div class="detail-box">
                 <h6>
-                {{this.name}}
+                {{this.watch_name}}
                 </h6>
                 <h6>
                 Price:
@@ -73,8 +75,7 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
 
     console.log(viewAllBtn)
     viewAllBtn.addEventListener("click", ()=>{
-        console.log("requestWatchesData")
-        socket.emit("requestWatchesData", {name: productName.value, price: productPrice.value, tag: productTag.value, image: productImage.value})
+        socket.emit("requestWatchesData", {id: String(new Date().getTime()), watch_name: productName.value, price: productPrice.value, tag: productTag.value, image: productImage.value})
     })
 }
 
@@ -83,7 +84,7 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
 if (window.location.href === "http://localhost:8080/chat") {
     socket.on("conexionOK", data => {
         document.getElementById("messages_list").innerHTML = data.messages.map(message => `<li><strong class="chat_email">${message.chat_user}</strong>
-        <span class="chat_date">${new Date().toLocaleString()}</span>:
+        <span class="chat_date">${String(new Date().getTime())}</span>:
         <span class="chat_message">${message.chat_text}</span></li>`).join("");
     })
 
