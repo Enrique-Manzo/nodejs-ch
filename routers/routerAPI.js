@@ -26,6 +26,7 @@ routerAPI.get("/product/:id", controladoresAPI.getProductById);
 routerAPI.post("/product", adminCheck, controladoresAPI.postProduct);
 routerAPI.delete("/product/:id", adminCheck, controladoresAPI.deleteProduct);
 routerAPI.put("/product/:id", adminCheck, controladoresAPI.updateProduct);
+routerAPI.get("/productos/test", controladoresAPI.getTestProducts);
 
 // CARRITO
 

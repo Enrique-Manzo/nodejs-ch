@@ -768,14 +768,19 @@ a:focus {
   margin-top: 50px;
   margin-bottom: 50px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
+.chat_fields {
+  width: 100%;
+  margin: 0;
+}
+
 #chat_messages_wrapper {
-  width: 800px;
-  height: 300px;
+  width: 500px;
+  height: 550px;
   border: 1px solid gray;
   display: flex;
   flex-direction: column;
@@ -799,7 +804,7 @@ a:focus {
 
 .chat_credentials {
   margin-top: 5px;
-  width: 50%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -814,8 +819,9 @@ a:focus {
   color: blue;
 }
 
-.chat_date {
-  color: brown
+.chat_avatar {
+  width: 10%;
+  aspect-ratio: 1/1;
 }
 
 .chat_message {

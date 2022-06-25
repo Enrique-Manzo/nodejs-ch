@@ -1,14 +1,14 @@
-import MongoClient from "../MongoDB/mongo";
+import mongoClient from "../MongoDB/mongo.js";
 
-class ContenedorMongoDB {
+export default class ContenedorMongoDB {
 
     // CREATE
 
     async insertObject(database, collection, object) {
         try {
-            await MongoClient.connect();
+            await mongoClient.connect();
         
-            const userDatabase = MongoClient.db(database);
+            const userDatabase = mongoClient.db(database);
         
             const userCollection = userDatabase.collection(collection);
         
@@ -17,37 +17,62 @@ class ContenedorMongoDB {
         } catch(error) {
             console.log(error)
         } finally {
-            await MongoClient.close();
+            await mongoClient.close();
         }
     }
 
+    async insertManyObjects(database, collection, objectArray) {
+        try {
+            await mongoClient.connect();
+        
+            const userDatabase = mongoClient.db(database);
+        
+            const userCollection = userDatabase.collection(collection);
+        
+            await userCollection.insertMany(objectArray)
+        
+        } catch(error) {
+            console.log(error)
+        } finally {
+            await mongoClient.close();
+        }
+    }
+
+
+
     // READ
 
-    async readAll(database, collection) {
+    async readAll(database, collection, update_id) {
         try {
-            await MongoClient.connect();
+            await mongoClient.connect();
         
-            const userDatabase = MongoClient.db(database);
+            const userDatabase = mongoClient.db(database);
         
             const userCollection = userDatabase.collection(collection);
         
             const collectionObjects = await userCollection.find().toArray();
         
+            if (update_id) {
+                for (let message of collectionObjects) {
+                    message._id = message._id.toString()
+                }
+            }
+
             return collectionObjects
         
         } catch(error) {
             console.log(error)
         } finally {
-            await MongoClient.close();
+            await mongoClient.close();
         }
 
     }
 
     async readById(database, collection, objectID) {
         try {
-            await MongoClient.connect();
+            await mongoClient.connect();
         
-            const userDatabase = MongoClient.db(database);
+            const userDatabase = mongoClient.db(database);
         
             const userCollection = userDatabase.collection(collection);
         
@@ -58,7 +83,7 @@ class ContenedorMongoDB {
         } catch(error) {
             console.log(error)
         } finally {
-            await MongoClient.close();
+            await mongoClient.close();
         }
     }
     
@@ -66,9 +91,9 @@ class ContenedorMongoDB {
 
     async updateOne(database, collection, query, newValues) {
         try {
-            await MongoClient.connect();
+            await mongoClient.connect();
         
-            const userDatabase = MongoClient.db(database);
+            const userDatabase = mongoClient.db(database);
         
             const userCollection = userDatabase.collection(collection);
         
@@ -77,7 +102,7 @@ class ContenedorMongoDB {
         } catch(error) {
             console.log(error)
         } finally {
-            await MongoClient.close();
+            await mongoClient.close();
         }
     }
 
@@ -86,9 +111,9 @@ class ContenedorMongoDB {
     async deleteOne(database, collection, query) {
         try {
 
-            await MongoClient.connect();
+            await mongoClient.connect();
         
-            const userDatabase = MongoClient.db(database);
+            const userDatabase = mongoClient.db(database);
         
             const userCollection = userDatabase.collection(collection);
         
@@ -97,7 +122,7 @@ class ContenedorMongoDB {
         } catch(error) {
             console.log(error)
         } finally {
-            await MongoClient.close();
+            await mongoClient.close();
         }
 
     }

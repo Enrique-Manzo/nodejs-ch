@@ -83,20 +83,36 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
 
 if (window.location.href === "http://localhost:8080/chat") {
     socket.on("conexionOK", data => {
-        document.getElementById("messages_list").innerHTML = data.messages.map(message => `<li><strong class="chat_email">${message.chat_user}</strong>
-        <span class="chat_date">${String(new Date().getTime())}</span>:
-        <span class="chat_message">${message.chat_text}</span></li>`).join("");
+        document.getElementById("messages_list").innerHTML = data.messages.map(message => `<li><strong class="chat_email">${message.author.alias}</strong>
+        <img class="chat_avatar" src="${message.author.avatar}">
+        <span class="chat_message">${message.text}</span></li>`).join("");
     })
 
 
     const btn = document.getElementById("btn_send");
 
+    const userEmail = document.getElementById("user_email");
+    const name = document.getElementById("user_name");
+    const surname = document.getElementById("user_surname");
+    const age = document.getElementById("user_age");
+    const nickname = document.getElementById("user_nickname");
+    const avatar = document.getElementById("user_avatar");
     const userMessage = document.getElementById("user_message");
-    const userEmail = document.getElementById("user_email")
 
     btn.addEventListener("click", ()=>{
         if (userEmail.value.length > 1 &&  userEmail.value.includes("@")) {
-            socket.emit("message", {chat_user: userEmail.value, chat_text: userMessage.value})
+            socket.emit("message", {
+                author: {
+                    id: userEmail.value,
+                    nombre: name.value,
+                    apellido: surname.value,
+                    edad: age.value,
+                    alias: nickname.value,
+                    avatar: avatar.value,
+
+                },
+                text: userMessage.value
+            })
             userMessage.value = "";
         }
     })

@@ -1,5 +1,6 @@
 import contenedor from "../database/databaseProducts.js";
 import { SQLClientAdmin } from "../database/SQLClient.js";
+import { faker } from "@faker-js/faker";
 
 
 const controladoresAPI = {
@@ -53,6 +54,24 @@ const controladoresAPI = {
 
         res.json({"message": "Update successful."})
         
+    },
+
+    getTestProducts: async (req, res) => {
+        console.log("test")
+        const productArray = [];
+
+        for (let i = 0; i < 5; i++) {
+            const testProduct = {};
+
+            testProduct.name = await faker.commerce.productName();
+            testProduct.price = await faker.commerce.price(100,1000);
+            testProduct.image = await faker.image.food();
+
+            productArray.push(testProduct)
+        }
+        
+
+        res.json(productArray);
     }
 };
 

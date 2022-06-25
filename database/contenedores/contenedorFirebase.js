@@ -3,13 +3,15 @@ import { getFirestore, getDoc, doc } from "firebase/firestore/lite";
 
 const asObj = (doc)=>({id: doc.id, ...doc.data()})
 
-class contenedorFirebase {
-    
+export default class contenedorFirebase {
+    constructor(collectionName) {
+        this.collectionName = collectionName;
+    }
     // CREATE
 
-    async createDoc(collectionName, newDocument) {
+    async createDoc(newDocument) {
         const db = getFirestoreApp();
-        const query = db.collection(collectionName)
+        const query = db.collection(this.collectionName)
         try {
             const doc = query.doc();
             await doc.create(newDocument)
@@ -20,20 +22,20 @@ class contenedorFirebase {
 
     // READ
 
-    async readById(collectionName, documentID) {
+    async readById(documentID) {
         const db = getFirestoreApp();
 
-        const queryDoc = await db.collection(collectionName).doc(documentID).get();
+        const queryDoc = await db.collection(this.collectionName).doc(documentID).get();
 
         return asObj(queryDoc);
     }
 
     // UPDATE
 
-    async updateDoc(collectionName, documentID, newData) {
+    async updateDoc(documentID, newData) {
         try {
             const db = getFirestoreApp();
-            const query = db.collection(collectionName);
+            const query = db.collection(this.collectionName);
             const doc = query.doc(documentID);
             await doc.update(newData);
         } catch(error) {
@@ -43,19 +45,16 @@ class contenedorFirebase {
 
     // DELETE
 
-    async deleteDoc(collectionName, documentID) {
+    async deleteDoc(documentID) {
         try {
             const db = getFirestoreApp();
-            const query = db.collection(collectionName);
+            const query = db.collection(this.collectionName);
             const doc = query.doc(documentID);
             await doc.delete();
         } catch (error) {
             console.log(error)
         }
     }
-
-
-
 
 }
 

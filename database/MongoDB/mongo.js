@@ -8,7 +8,7 @@ const password = "panzerfaust";
 
 const uri = `mongodb://${host}:${port}`;
 
-const MongoClient = new MongoClient(uri,
+const mongoClient = new MongoClient(uri,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -21,9 +21,9 @@ const MongoClient = new MongoClient(uri,
 )
 
 try {
-    await MongoClient.connect();
+    await mongoClient.connect();
 
-    const dbEcommerce = MongoClient.db("ecommerce");
+    const dbEcommerce = mongoClient.db("ecommerce");
 
     const dbProductos = dbEcommerce.collection("productos");
 
@@ -34,7 +34,7 @@ try {
 } catch(error) {
     console.log(error)
 } finally {
-    await MongoClient.close();
+    await mongoClient.close();
 }
 
-export default MongoClient
+export default mongoClient
