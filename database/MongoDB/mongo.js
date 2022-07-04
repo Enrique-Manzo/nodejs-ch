@@ -20,21 +20,4 @@ const mongoClient = new MongoClient(uri,
     }
 )
 
-try {
-    await mongoClient.connect();
-
-    const dbEcommerce = mongoClient.db("ecommerce");
-
-    const dbProductos = dbEcommerce.collection("productos");
-
-    const productos = await dbProductos.find().toArray();
-
-    console.log(productos);
-
-} catch(error) {
-    console.log(error)
-} finally {
-    await mongoClient.close();
-}
-
 export default mongoClient

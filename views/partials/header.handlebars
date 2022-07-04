@@ -17,7 +17,7 @@
     <header class="header_section">
       <div class="container-fluid">
         <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="index.html">
+          <a class="navbar-brand" href="/">
             <span>
               Timups
             </span>
@@ -43,15 +43,18 @@
               </li>
             </ul>
             <div class="user_option-box">
-              <a href="">
-                <i class="fa fa-user" aria-hidden="true"></i>
-              </a>
+              {{#if name}}
               <a href="">
                 <span>{{ name }}</span>
               </a>
-              <a href="">
-                <i class="fa fa-search" aria-hidden="true"></i>
+              <a href="/logout">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
               </a>
+              {{else}}
+              <a href="/login">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+              {{/if}}
             </div>
           </div>
         </nav>

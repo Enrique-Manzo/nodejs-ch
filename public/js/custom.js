@@ -1,27 +1,3 @@
-// client section owl carousel
-$(".client_owl-carousel").owlCarousel({
-    loop: true,
-    margin: 20,
-    dots: false,
-    nav: true,
-    navText: [],
-    autoplay: true,
-    autoplayHoverPause: true,
-    navText: [
-        '<i class="fa fa-angle-left" aria-hidden="true"></i>',
-        '<i class="fa fa-angle-right" aria-hidden="true"></i>'
-    ],
-    responsive: {
-        0: {
-            items: 1
-        },
-        768: {
-            items: 2
-        }
-    }
-});
-
-
 const socket = io();
 
 // LIVE PRODUCTS
@@ -31,7 +7,7 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
         return featured == "Featured";
       });
     socket.on("watchesData", data => {
-        console.log("listening")
+        
         const htmlString = `{{#each watches}}
         <div class="{{#if (isFeatured this.tag)}}col-md-6 {{else}}col-sm-6 col-xl-3{{/if}}">
         <div class="box">
@@ -73,7 +49,7 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
     const productTag = document.getElementById("product_tag");
     const productImage = document.getElementById("product_image");
 
-    console.log(viewAllBtn)
+   
     viewAllBtn.addEventListener("click", ()=>{
         socket.emit("requestWatchesData", {id: String(new Date().getTime()), watch_name: productName.value, price: productPrice.value, tag: productTag.value, image: productImage.value})
     })
@@ -118,3 +94,56 @@ if (window.location.href === "http://localhost:8080/chat") {
     })
 
 }
+
+// NEW CHAT APP
+
+if (window.location.href === "http://localhost:8080/chat") {
+    socket.on("conexionOK", data => {
+        document.getElementById("chat_messages_new").innerHTML = data.messages.map(message =>        
+        `
+        <div class="chat-message-right pb-4">
+            <div>
+                <img src="${message.author.avatar}" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                <div class="text-muted small text-nowrap mt-2">2:33 am</div>
+            </div>
+            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                <div class="font-weight-bold mb-1">${message.author.alias}</div>
+                ${message.text}
+            </div>
+        </div>
+        `).join("");
+    })
+
+}
+
+// LOGIN MANAGEMENT
+
+const loginManagement = () => {
+
+    const loginUsername = document.getElementById("login_username").value;
+    const loginPassword = document.getElementById("login_password").value
+
+    fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+
+        //make sure to serialize your JSON body
+        body: JSON.stringify({
+            username: loginUsername,
+            password: loginPassword
+        })
+        })
+        .then( (response) => { 
+            
+            if (response.status == 200) {
+                window.location.replace("/");
+            }
+        });
+
+
+}
+
+document.getElementById("login_button").addEventListener("click", loginManagement);

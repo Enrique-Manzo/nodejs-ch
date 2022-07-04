@@ -30,6 +30,14 @@ export default class contenedorFirebase {
         return asObj(queryDoc);
     }
 
+    async readAll() {
+        const db = getFirestoreApp();
+
+        const queryDoc = await db.collection(this.collectionName).get();
+
+        return asObj(queryDoc);
+    }
+
     // UPDATE
 
     async updateDoc(documentID, newData) {

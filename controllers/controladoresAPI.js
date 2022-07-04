@@ -1,7 +1,10 @@
 import contenedor from "../database/databaseProducts.js";
 import { SQLClientAdmin } from "../database/SQLClient.js";
 import { faker } from "@faker-js/faker";
+import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
 
+
+const mongo = new ContenedorMongoDB();
 
 const controladoresAPI = {
     
@@ -72,6 +75,31 @@ const controladoresAPI = {
         
 
         res.json(productArray);
+    },
+
+    // Esto es para testear un proyecto separado en el que estoy trabajando
+    postAudio: async (req, res) => {
+        console.log("hit")
+        console.log(req.file)
+    },
+
+    postLogin: async (req, res) => {
+        const username_ = req.body.username;
+        const password = req.body.password;
+        
+        const user = await mongo.findByUsername("ecommerce", "users", username_)
+        
+        if (user) {
+            if (username_ == user.username && password == user.password) {
+                req.session.user = username_;
+                req.session.admin = true;
+                res.status(200).json({"message": "login successful"})
+            } else {
+                return res.status(401).send("Authentication error")
+            }
+    
+        }
+    
     }
 };
 

@@ -38,18 +38,17 @@ export default class ContenedorMongoDB {
         }
     }
 
-
-
     // READ
 
     async readAll(database, collection, update_id) {
         try {
+            
             await mongoClient.connect();
-        
+            
             const userDatabase = mongoClient.db(database);
         
             const userCollection = userDatabase.collection(collection);
-        
+            
             const collectionObjects = await userCollection.find().toArray();
         
             if (update_id) {
@@ -86,6 +85,30 @@ export default class ContenedorMongoDB {
             await mongoClient.close();
         }
     }
+
+    async findByUsername(database, collection, username) {
+        try {
+            await mongoClient.connect();
+
+            const userDatabase = mongoClient.db(database);
+
+            const userCollection = userDatabase.collection(collection);
+        
+            const user = await userCollection.findOne({username: username});
+
+            if (user) {
+                return user
+            } else {
+                return "No user found"
+            }
+
+        } catch(error) {
+            console.log(error)
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    
     
     // UPDATE
 

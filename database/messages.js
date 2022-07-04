@@ -42,9 +42,9 @@ export async function getMessages() {
     })
 
     const normalizedMessages = normalize(chat, chatSchema);
-    console.log(util.inspect(normalizedMessages, false, 12, true))
+    
     const denormalizedMessages = denormalize(normalizedMessages.result, chatSchema, normalizedMessages.entities)
-    console.log(util.inspect(denormalizedMessages, false, 12, true))
+    
 
     return messages
 }
