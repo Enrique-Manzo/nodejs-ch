@@ -8,10 +8,10 @@ const controladoresWeb = {
         
         res.render("main", {layout: "index", name: req.session.user, watches: await mongoDB.readAll("ecommerce", "productos")})
     },
-    watches: async (req, res) => {res.render("watches", {layout: "index", watches: await mongoDB.readAll("ecommerce", "productos")})},
-    about: (req, res) => {res.render("about", {layout: "index"})},
-    contact: (req, res) => {res.render("chat", {layout: "index"})},
-    login: (req, res) => {res.render("login", {layout: "index"})},
+    watches: async (req, res) => {res.render("watches", {layout: "index", name: req.session.user, watches: await mongoDB.readAll("ecommerce", "productos")})},
+    about: (req, res) => {res.render("about", {layout: "index", name: req.session.user})},
+    contact: (req, res) => {res.render("chat", {layout: "index", name: req.session.user})},
+    login: (req, res) => {res.render("login", {layout: "index", name: req.session.user})},
     logout: async (req, res) => {
         req.session.destroy()
 
