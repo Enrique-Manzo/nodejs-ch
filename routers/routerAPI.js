@@ -32,8 +32,8 @@ const routerAPI = new Router();
 
 let admin = false;
 
-routerAPI.get("/login", (req, res)=>{admin=true; res.status(200).json({"message": "login successful"});})
-routerAPI.get("/logout", (req, res)=>{admin=false; res.status(200).json({"message": "logout successful"});})
+routerAPI.get("/prod_login", (req, res)=>{admin=true; res.status(200).json({"message": "login successful"});})
+routerAPI.get("/prod_logout", (req, res)=>{admin=false; res.status(200).json({"message": "logout successful"});})
 
 function adminCheck(req, res, next) {
     if (admin) {
@@ -65,6 +65,11 @@ routerAPI.delete("/carrito/:id/productos/:id_prod", controladoresAPICarrito.dele
 
 routerAPI.post("/audiopost", middlewareDeUnArchivo, controladoresAPI.postAudio);
 
+// AUTHENTICATION
+
+routerAPI.post("/login", controladoresAPI.postLogin)
+
+
 // TESTS
 
 function auth(req, res, next) {
@@ -75,7 +80,7 @@ function auth(req, res, next) {
     return res.status(401).send("Authentication error - user not found.")
 }
 
-routerAPI.post("/login", controladoresAPI.postLogin)
+
 
 routerAPI.get("/test/logout", (req, res) => {
     req.session.destroy(err => {

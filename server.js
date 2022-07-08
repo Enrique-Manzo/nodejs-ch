@@ -31,9 +31,11 @@ const io = new SocketServer(httpServer);
 io.on("connection", (socket)=> {
     console.log("Socket connected");
     
-    getMessages()
-    .then((messages)=>{
-        socket.emit("conexionOK", {messages: messages})
+    socket.on("requestMessages", ()=>{
+        getMessages()
+        .then((messages)=>{
+            socket.emit("conexionOK", {messages: messages})
+        })
     })
     
     socket.on("message", async (message)=>{
@@ -44,7 +46,7 @@ io.on("connection", (socket)=> {
         })
     })
     
-    socket.on("requestWatchesData", async (data)=>{
+    socket.on("pushWatchAndRetrieve", async (data)=>{
         
         await addWatch(data);
         getWatches()
@@ -53,10 +55,16 @@ io.on("connection", (socket)=> {
         })
     })
 
-    getWatches()
+    socket.on("retrieveWatches", ()=>{
+        
+        getWatches()
         .then((watches)=>{
             socket.emit("watchesData", {watches: watches})
         })
+
+    })
+
+    
     
 })
 
@@ -90,7 +98,7 @@ app.use(session({
     secret: "CbFh!M,;e3vm?hz:",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: "mongodb://root:panzerfaust@localhost:27017/sessions?authSource=admin&w=1" }),
+    store: MongoStore.create({ mongoUrl: "mongodb+srv://enriquemanzoadmin:n5nmsLrfYidDeqig@cluster0.sjio4.mongodb.net/?retryWrites=true&w=majority", ttl:600 }),
 }));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");

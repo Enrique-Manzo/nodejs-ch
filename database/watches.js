@@ -1,6 +1,6 @@
 import { SQLClientAdmin } from "./SQLClient.js";
 import ContenedorMongoDB from "./contenedores/contenedorMongoDB.js";
-/*
+
 const mongoDB = new ContenedorMongoDB();
 
 export async function addWatch(watch) {
@@ -12,15 +12,3 @@ export async function getWatches() {
 
     return data
 }
-*/
-
-export async function addWatch(watch) {
-    await SQLClientAdmin.insert(watch).into("watches");
-};
-
-export async function getWatches() {
-    const data = await SQLClientAdmin.select("*").from("watches");
-    
-    return data
-}
-

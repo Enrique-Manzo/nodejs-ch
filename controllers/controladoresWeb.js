@@ -1,7 +1,5 @@
 import { SQLClientAdmin } from "../database/SQLClient.js";
 import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
-import session from "express-session";
-
 
 const mongoDB = new ContenedorMongoDB();
 
@@ -16,7 +14,6 @@ const controladoresWeb = {
     login: (req, res) => {res.render("login", {layout: "index"})},
     logout: async (req, res) => {
         req.session.destroy()
-
 
         res.render("main", {layout: "index", watches: await mongoDB.readAll("ecommerce", "productos")})
     }

@@ -3,11 +3,15 @@ const socket = io();
 // LIVE PRODUCTS
 
 if (window.location.href === "http://localhost:8080/watches" || window.location.href === "http://localhost:8080/") {
+    
+    socket.emit("retrieveWatches")
+        
+    
     Handlebars.registerHelper('isFeatured', function (featured) {
         return featured == "Featured";
-      });
+    });
     socket.on("watchesData", data => {
-        
+                
         const htmlString = `{{#each watches}}
         <div class="{{#if (isFeatured this.tag)}}col-md-6 {{else}}col-sm-6 col-xl-3{{/if}}">
         <div class="box">
@@ -17,7 +21,7 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
             </div>
             <div class="detail-box">
                 <h6>
-                {{this.watch_name}}
+                {{this.name}}
                 </h6>
                 <h6>
                 Price:
@@ -49,55 +53,58 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
     const productTag = document.getElementById("product_tag");
     const productImage = document.getElementById("product_image");
 
-   
     viewAllBtn.addEventListener("click", ()=>{
-        socket.emit("requestWatchesData", {id: String(new Date().getTime()), watch_name: productName.value, price: productPrice.value, tag: productTag.value, image: productImage.value})
+        socket.emit("pushWatchAndRetrieve", {id: String(new Date().getTime()), watch_name: productName.value, price: productPrice.value, tag: productTag.value, image: productImage.value})
     })
 }
 
 // CHAT APP
-
+/*
 if (window.location.href === "http://localhost:8080/chat") {
-    socket.on("conexionOK", data => {
-        document.getElementById("messages_list").innerHTML = data.messages.map(message => `<li><strong class="chat_email">${message.author.alias}</strong>
-        <img class="chat_avatar" src="${message.author.avatar}">
-        <span class="chat_message">${message.text}</span></li>`).join("");
-    })
+    socket.emit("requestMessages", ()=>{
+        socket.on("conexionOK", data => {
+            document.getElementById("messages_list").innerHTML = data.messages.map(message => `<li><strong class="chat_email">${message.author.alias}</strong>
+            <img class="chat_avatar" src="${message.author.avatar}">
+            <span class="chat_message">${message.text}</span></li>`).join("");
+        })
 
 
-    const btn = document.getElementById("btn_send");
+        const btn = document.getElementById("btn_send");
 
-    const userEmail = document.getElementById("user_email");
-    const name = document.getElementById("user_name");
-    const surname = document.getElementById("user_surname");
-    const age = document.getElementById("user_age");
-    const nickname = document.getElementById("user_nickname");
-    const avatar = document.getElementById("user_avatar");
-    const userMessage = document.getElementById("user_message");
+        const userEmail = document.getElementById("user_email");
+        const name = document.getElementById("user_name");
+        const surname = document.getElementById("user_surname");
+        const age = document.getElementById("user_age");
+        const nickname = document.getElementById("user_nickname");
+        const avatar = document.getElementById("user_avatar");
+        const userMessage = document.getElementById("user_message");
 
-    btn.addEventListener("click", ()=>{
-        if (userEmail.value.length > 1 &&  userEmail.value.includes("@")) {
-            socket.emit("message", {
-                author: {
-                    id: userEmail.value,
-                    nombre: name.value,
-                    apellido: surname.value,
-                    edad: age.value,
-                    alias: nickname.value,
-                    avatar: avatar.value,
+        btn.addEventListener("click", ()=>{
+            if (userEmail.value.length > 1 &&  userEmail.value.includes("@")) {
+                socket.emit("message", {
+                    author: {
+                        id: userEmail.value,
+                        nombre: name.value,
+                        apellido: surname.value,
+                        edad: age.value,
+                        alias: nickname.value,
+                        avatar: avatar.value,
 
-                },
-                text: userMessage.value
-            })
-            userMessage.value = "";
-        }
+                    },
+                    text: userMessage.value
+                })
+                userMessage.value = "";
+            }
+        })
     })
 
 }
+*/
 
 // NEW CHAT APP
 
 if (window.location.href === "http://localhost:8080/chat") {
+    socket.emit("requestMessages")
     socket.on("conexionOK", data => {
         document.getElementById("chat_messages_new").innerHTML = data.messages.map(message =>        
         `
@@ -113,7 +120,6 @@ if (window.location.href === "http://localhost:8080/chat") {
         </div>
         `).join("");
     })
-
 }
 
 // LOGIN MANAGEMENT
