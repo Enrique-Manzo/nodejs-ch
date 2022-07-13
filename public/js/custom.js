@@ -127,9 +127,11 @@ if (window.location.href === "http://localhost:8080/chat") {
 const loginManagement = () => {
 
     const loginUsername = document.getElementById("login_username").value;
-    const loginPassword = document.getElementById("login_password").value
+    const loginPassword = document.getElementById("login_password").value;
 
-    fetch("http://localhost:8080/api/login", {
+    document.getElementById("button_container").innerHTML = "<div>LOADING...</div>";
+
+    fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
@@ -152,4 +154,40 @@ const loginManagement = () => {
 
 }
 
-document.getElementById("login_button").addEventListener("click", loginManagement);
+if (window.location.href === "http://localhost:8080/login") {
+    document.getElementById("login_button").addEventListener("click", loginManagement);
+}
+
+// REGISTRATION MANAGEMENT
+
+const registrationManagement = () => {
+
+    const loginUsername = document.getElementById("login_username").value;
+    const loginPassword = document.getElementById("login_password").value;
+
+    document.getElementById("button_container").innerHTML = "<div>LOADING...</div>";
+
+    fetch("http://localhost:8080/auth/register", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+
+        //make sure to serialize your JSON body
+        body: JSON.stringify({
+            username: loginUsername,
+            password: loginPassword
+        })
+        })
+        .then( (response) => { 
+            
+            if (response.status == 200) {
+                window.location.replace("/");
+            }
+        });
+}
+
+if (window.location.href === "http://localhost:8080/signup") {
+    document.getElementById("registration_button").addEventListener("click", registrationManagement);
+}

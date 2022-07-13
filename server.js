@@ -3,6 +3,7 @@ import { Server as SocketServer } from "socket.io";
 import {controladoresForm} from "./controllers/controladoresForm.js"
 import routerWeb from "./routers/routerWeb.js";
 import routerAPI from "./routers/routerAPI.js";
+import routerAuth from "./routers/routerAuth.js";
 import {engine} from "express-handlebars";
 import { getMessages, addMessage } from "./database/messages.js";
 import { getWatches, addWatch } from "./database/watches.js";
@@ -11,6 +12,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import sfs from "session-file-store";
 import cors from "cors";
+import { passportMiddleware, passportSessionHandler } from "./middlewares/authentication/passport.js";
+
 
 // PATHS
 import * as path from 'path'; //const path = require('path');
@@ -63,8 +66,6 @@ io.on("connection", (socket)=> {
         })
 
     })
-
-    
     
 })
 
@@ -102,10 +103,14 @@ app.use(session({
 }));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
+app.use(passportMiddleware);
+app.use(passportSessionHandler);
 
 // ROUTES
 app.use("/", routerWeb); // handles static files
 app.use("/api", routerAPI); // handles api calls
+app.use("/auth", routerAuth); // handles authentication requests
+
 app.post("/product-form", controladoresForm.postProduct) // handled by Express - receives form posts
 
 // SERVER

@@ -8,6 +8,7 @@ routerWeb.get("/watches", controladoresWeb.watches)
 routerWeb.get("/about", controladoresWeb.about)
 routerWeb.get("/chat", controladoresWeb.contact)
 routerWeb.get("/login", controladoresWeb.login)
+routerWeb.get("/signup", controladoresWeb.signup)
 routerWeb.get("/logout", controladoresWeb.logout)
 
 export default routerWeb
