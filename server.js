@@ -13,7 +13,8 @@ import MongoStore from "connect-mongo";
 import sfs from "session-file-store";
 import cors from "cors";
 import { passportMiddleware, passportSessionHandler } from "./middlewares/authentication/passport.js";
-
+import dotenv from 'dotenv';
+import parseArgs from 'minimist';
 
 // PATHS
 import * as path from 'path'; //const path = require('path');
@@ -22,6 +23,12 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicPath = path.resolve(__dirname, 'public');
+
+// SECURE INFO
+
+dotenv.config({
+    path: path.resolve(process.cwd(), 'one.env'),
+})
 
 // APP
 const app = express();
@@ -89,6 +96,7 @@ const corsOptions = {
 // SESSION FILE STORE
 
 const FileStore = sfs(session)
+const mongoStoreUri = `mongodb+srv://${process.env.MONGO_USER_ADMIN}:${process.env.MONGO_USER_PASS}@cluster0.sjio4.mongodb.net/?retryWrites=true&w=majority`;
 
 // APP SETTINGS
 app.use(express.static(publicPath));
@@ -96,10 +104,10 @@ app.use(express.json()); // checks whether there's a json object in the req body
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(session({
-    secret: "CbFh!M,;e3vm?hz:",
+    secret: "CbFh!M,;e3vm?hz:", // SESSION_SECRET="CbFh!M,;e3vm?hz:"
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: "mongodb+srv://enriquemanzoadmin:n5nmsLrfYidDeqig@cluster0.sjio4.mongodb.net/?retryWrites=true&w=majority", ttl:600 }),
+    store: MongoStore.create({ mongoUrl: mongoStoreUri, ttl:600 }),
 }));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -110,11 +118,33 @@ app.use(passportSessionHandler);
 app.use("/", routerWeb); // handles static files
 app.use("/api", routerAPI); // handles api calls
 app.use("/auth", routerAuth); // handles authentication requests
+app.use("/info", (req, res)=> {
+    
+    const info = {
+        arguments: process.argv,
+        operatingSystem: process.platform,
+        nodeVersion: process.version,
+        reservedMemory: process.memoryUsage(),
+        executionPath: process.execPath,
+        processID: process.id,
+        projectFolder: process.cwd(),
+    }
+     
+    res.json(info)
+})
 
 app.post("/product-form", controladoresForm.postProduct) // handled by Express - receives form posts
 
+// CLI COMMAND VARIABLES
+
+const args = parseArgs(process.argv.slice(2), {
+    default: {
+        PORT: 8080,
+    }
+})
+
 // SERVER
-const server = httpServer.listen(8080, ()=>{
+const server = httpServer.listen(args.PORT, ()=>{
     console.log(`Server listening on port ${server.address().port}`)
 });
 

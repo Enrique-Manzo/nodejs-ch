@@ -61,6 +61,10 @@ routerAPI.post("/carrito/:id", controladoresAPICarrito.postAddProductToCart);
 routerAPI.delete("/carrito/:id", controladoresAPICarrito.deleteCart);
 routerAPI.delete("/carrito/:id/productos/:id_prod", controladoresAPICarrito.deleteCartProduct);
 
+// CHILD PROCESSES
+
+routerAPI.get("/randoms", controladoresAPI.getRandoms);
+
 // FILES
 
 routerAPI.post("/audiopost", middlewareDeUnArchivo, controladoresAPI.postAudio);

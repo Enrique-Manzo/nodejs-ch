@@ -2,6 +2,7 @@ import contenedor from "../database/databaseProducts.js";
 import { SQLClientAdmin } from "../database/SQLClient.js";
 import { faker } from "@faker-js/faker";
 import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
+import { fork } from 'child_process';
 
 
 const mongo = new ContenedorMongoDB();
@@ -100,6 +101,20 @@ const controladoresAPI = {
     
         }
     
+    },
+
+    getRandoms: (req, res) => {
+        const limit = parseInt(req.query.cant);       
+ 
+        const calculation = fork("./controllers/randomCalculation.js");
+        calculation.on("message", msg => {
+            if (msg == "start") {
+                calculation.send(limit)
+            } else {
+                res.json(msg)
+            }
+        })
+
     }
 };
 

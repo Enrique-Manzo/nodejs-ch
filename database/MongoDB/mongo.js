@@ -1,13 +1,20 @@
 import { MongoClient } from "mongodb";
+import dotenv from 'dotenv'
+import * as path from 'path';
 
+/*
 const host = "localhost";
 const port = 27017;
 
 const username = "root";
 const password = "panzerfaust";
+*/
 
-//const uri = `mongodb://${host}:${port}`;
-const uri = "mongodb+srv://enriquemanzoadmin:n5nmsLrfYidDeqig@cluster0.sjio4.mongodb.net/?retryWrites=true&w=majority";
+dotenv.config({
+    path: path.resolve(process.cwd(), 'one.env'),
+})
+
+const uri = `mongodb+srv://${process.env.MONGO_USER_ADMIN}:${process.env.MONGO_USER_PASS}@cluster0.sjio4.mongodb.net/?retryWrites=true&w=majority`;
 
 const mongoClient = new MongoClient(uri,
     {
