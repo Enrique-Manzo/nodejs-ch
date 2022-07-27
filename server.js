@@ -15,6 +15,8 @@ import cors from "cors";
 import { passportMiddleware, passportSessionHandler } from "./middlewares/authentication/passport.js";
 import dotenv from 'dotenv';
 import parseArgs from 'minimist';
+import cluster from 'cluster';
+import os from 'os';
 
 // PATHS
 import * as path from 'path'; //const path = require('path');
@@ -126,8 +128,9 @@ app.use("/info", (req, res)=> {
         nodeVersion: process.version,
         reservedMemory: process.memoryUsage(),
         executionPath: process.execPath,
-        processID: process.id,
+        processID: process.pid,
         projectFolder: process.cwd(),
+        numberOfProcessors: os.cpus().length
     }
      
     res.json(info)
@@ -143,10 +146,40 @@ const args = parseArgs(process.argv.slice(2), {
     }
 })
 
+// CLUSTER
+/*
+if (cluster.isPrimary) {
+    const numCPUs = os.cpus().length
+    console.log(`PID PRIMARIO ${process.pid}`)
+
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork()
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died`)
+        for (let id in cluster.workers) {
+            cluster.workers[id].kill();
+            }
+            // exit the master process
+            process.exit(0);
+    })
+} else {
+    // SERVER
+    const server = httpServer.listen(args.PORT, ()=>{
+        console.log(`Server listening on port ${server.address().port} | Worker process ${process.pid}`)
+    });
+
+    // ERROR CALLS
+    server.on("error", error => console.log(`Server error ${error}`));
+}
+*/
+
 // SERVER
 const server = httpServer.listen(args.PORT, ()=>{
-    console.log(`Server listening on port ${server.address().port}`)
+    console.log(`Server listening on port ${server.address().port} | Worker process ${process.pid}`)
 });
 
 // ERROR CALLS
 server.on("error", error => console.log(`Server error ${error}`));
+
