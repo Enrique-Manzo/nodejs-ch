@@ -6,6 +6,7 @@ import multer from "multer";
 import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
 //import { database } from "firebase-admin";
 //import { Collection } from "mongoose";
+import logger from "../loggers/logger.js";
 
 const mongo = new ContenedorMongoDB();
 

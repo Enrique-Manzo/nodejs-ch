@@ -17,10 +17,13 @@ import dotenv from 'dotenv';
 import parseArgs from 'minimist';
 import cluster from 'cluster';
 import os from 'os';
+import compression from "compression";
+import logger from "./loggers/logger.js";
 
 // PATHS
 import * as path from 'path'; //const path = require('path');
 import { fileURLToPath } from 'url';
+import { nextTick } from "process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -115,12 +118,13 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.use(passportMiddleware);
 app.use(passportSessionHandler);
+app.use(function (req, res, next) {logger.info(`${req.url} | ${req.method}`); next()})
 
 // ROUTES
 app.use("/", routerWeb); // handles static files
 app.use("/api", routerAPI); // handles api calls
 app.use("/auth", routerAuth); // handles authentication requests
-app.use("/info", (req, res)=> {
+app.use("/info", compression(), (req, res)=> {
     
     const info = {
         arguments: process.argv,
@@ -135,6 +139,12 @@ app.use("/info", (req, res)=> {
      
     res.json(info)
 })
+
+app.all('*', (req, res) => {
+    const { url, method } = req
+    logger.warn(`Ruta ${method} ${url} no implementada`)
+    res.send(`Ruta ${method} ${url} no está implementada`)
+  })
 
 app.post("/product-form", controladoresForm.postProduct) // handled by Express - receives form posts
 
