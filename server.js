@@ -176,7 +176,7 @@ if (cluster.isPrimary) {
 */
 
 // SERVER
-const server = httpServer.listen(args.PORT, ()=>{
+const server = httpServer.listen(process.env.PORT || args.PORT, ()=>{
     console.log(`Server listening on port ${server.address().port} | Worker process ${process.pid}`)
 });
 
