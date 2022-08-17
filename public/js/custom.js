@@ -87,9 +87,8 @@ if (window.location.pathname === "/watches" || window.location.pathname === "/")
                         }
                     ).then(async response =>{
                         
-                        
                         const responseMessage = await response.json().message;
-                        console.log(await response)
+                        
                         if (true) {
                             document.getElementById("added!" + iconId).innerHTML = "Added!";
                         }
@@ -272,8 +271,9 @@ if (window.location.pathname === "/profile") {
     document.getElementById("place-purchase").addEventListener("click", function() {
         const userId = document.getElementById("user-id").textContent;
         const cartId = document.getElementById("cartId").textContent;
-        console.log(userId)
-        console.log(cartId);
+
+        document.getElementById("place-purchase").textContent = "Please wait...";
+        
         fetch(
             "/api/finish_purchase", {
                 method: "POST",
@@ -285,7 +285,16 @@ if (window.location.pathname === "/profile") {
                     userId: userId,
                     cartId: cartId
                 })
+                
             }
-        )
+        ).then( async (response)=>{
+
+            if (response.status === 200) {
+                document.getElementById("place-purchase").textContent = "Success!";
+                document.getElementsByClassName("profile-product-ul")[0].innerHTML = "<div></div>";
+            } else {
+                document.getElementById("place-purchase").textContent = response.status;
+            }
+        })
     });
 }

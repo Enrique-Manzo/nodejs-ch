@@ -13,7 +13,6 @@ const controladoresAPICarrito = {
             res.status(500).json({"error": "please log in"})
         }
 
-        console.log(req.session.passport.user.id)
         res.json({
             "user_id": req.session.passport.user.id,
             "username": req.session.passport.user.username,
@@ -38,8 +37,7 @@ const controladoresAPICarrito = {
         try {
             const product = await mongo.findProductById(productId);
             const cart = await mongo.findActiveCartsByUserId(userId);
-            console.log(productId)
-            console.log(cart)
+          
             if (cart) {
                 cart.products.push(product);
 
@@ -69,14 +67,14 @@ const controladoresAPICarrito = {
     },
 
     postFinishPurchase: async (req, res) => {
-        console.log(req.body)
+       
         const cartId = req.body.cartId;
         const userId = req.body.userId
 
         try {
             const cart = await mongo.findActiveCartsByUserId(userId);
             const user = await mongo.readById("ecommerce", "users", parseFloat(userId));
-            console.log(user)
+            
             const msg = {
                 to: ADMIN_EMAIL,
                 from: ADMIN_EMAIL,
@@ -106,10 +104,9 @@ const controladoresAPICarrito = {
                 from: 'whatsapp:+14155238886',       
                 to: 'whatsapp:+5492245423083' 
             }) 
-            .then(message => console.log(message.sid)) 
-            .done();
+            .then(message => console.log(message.sid))
 
-            res.status(200)
+            res.status(200).json({"message": "success"})
 
         } catch(error) {
             console.log(error)

@@ -5,7 +5,7 @@ const mongoDB = new ContenedorMongoDB();
 const controladoresWeb = {
     index: async (req, res) => {
         const isWatches = req.path == "/watches"
-        console.log(req.path, isWatches);
+        
         res.render("main", {layout: "index", name: req.session.passport?.user?.fname, watches: await mongoDB.readAll("ecommerce", "productos"), isWatches: isWatches})
     },
     watches: async (req, res) => {
@@ -30,6 +30,11 @@ const controladoresWeb = {
                 activeCarts = {};
                 activeCarts.id = "";
             }
+
+            if (activeCarts.products == null) {
+                activeCarts.products = "";
+            }
+
             res.render("profile", {
                 layout: "index",
                 name:req.session.passport?.user?.fname,
