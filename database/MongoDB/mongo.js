@@ -2,14 +2,6 @@ import { MongoClient } from "mongodb";
 import dotenv from 'dotenv'
 import * as path from 'path';
 
-/*
-const host = "localhost";
-const port = 27017;
-
-const username = "root";
-const password = "panzerfaust";
-*/
-
 dotenv.config({
     path: path.resolve(process.cwd(), 'one.env'),
 })

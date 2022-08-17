@@ -1,13 +1,13 @@
 import passport from "passport";
 
 export const registrationController = passport.authenticate('registration', {
-    successRedirect: '/',
+    successRedirect: '/profile',
     failureRedirect: '/auth/failRegister',
 })
 
 export const loginController = passport.authenticate('login', {
-    successRedirect: '/',
-    failureRedirect: '/auth/failLogin',
+    successRedirect: '/profile',
+    failureRedirect: '/login',
 })
 
 export function successRegisterController(req, res) {

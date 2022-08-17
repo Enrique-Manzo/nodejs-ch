@@ -119,6 +119,7 @@ app.set("view engine", "handlebars");
 app.use(passportMiddleware);
 app.use(passportSessionHandler);
 app.use(function (req, res, next) {logger.info(`${req.url} | ${req.method}`); next()})
+app.use('/usercontent/', express.static('./uploads/')); // public path for images
 
 // ROUTES
 app.use("/", routerWeb); // handles static files

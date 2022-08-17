@@ -2,11 +2,8 @@ const socket = io();
 
 // LIVE PRODUCTS
 
-if (window.location.href === "http://localhost:8080/watches" || window.location.href === "http://localhost:8080/") {
-    
-    socket.emit("retrieveWatches")
-        
-    
+if (window.location.pathname === "/watches" || window.location.pathname === "/") {
+         
     Handlebars.registerHelper('isFeatured', function (featured) {
         return featured == "Featured";
     });
@@ -56,6 +53,52 @@ if (window.location.href === "http://localhost:8080/watches" || window.location.
     viewAllBtn.addEventListener("click", ()=>{
         socket.emit("pushWatchAndRetrieve", {id: String(new Date().getTime()), watch_name: productName.value, price: productPrice.value, tag: productTag.value, image: productImage.value})
     })
+
+    // Adds event listeners to shopping carts
+
+    const shoppingCartsIcons = document.getElementsByTagName("i");
+
+    for (icon of shoppingCartsIcons) {
+        if(icon.parentElement.className === "shopping_controls") {
+            const iconId = icon.id;
+            icon.addEventListener("click", function(){
+
+                document.getElementById("spinner"+iconId).classList.add("loader-spinner");
+
+                fetch(
+                    "/api/user_id",
+                    {method: "GET"}
+                ).then(async (response) => {
+                    const json = await response.json()
+                    const userId = json.user_id;
+                    
+                    fetch(
+                        "/api/add_to_cart",
+                        {
+                            method: "POST",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "user_id": userId,
+                                "product_id": iconId
+                            })
+                        }
+                    ).then(async response =>{
+                        
+                        
+                        const responseMessage = await response.json().message;
+                        console.log(await response)
+                        if (true) {
+                            document.getElementById("added!" + iconId).innerHTML = "Added!";
+                        }
+                        
+                    })
+                })
+            })
+        }
+    }
 }
 
 // CHAT APP
@@ -154,40 +197,95 @@ const loginManagement = () => {
 
 }
 
-if (window.location.href === "http://localhost:8080/login") {
+if (window.location.pathname === "/login") {
     document.getElementById("login_button").addEventListener("click", loginManagement);
 }
 
 // REGISTRATION MANAGEMENT
 
 const registrationManagement = () => {
+    const fileInput = document.getElementById('profile_picture');
+    const selectedFile = fileInput.files[0];
+    const formData = new FormData();
+    const filenameProfile = `${new Date().toISOString().split('T')[0]}-profile-${selectedFile.name}`.replace(/ /g, '');
+    selectedFile.name = filenameProfile;
+    formData.append("profile_picture", selectedFile);
+    formData.append("profile_picture_name", filenameProfile);
+
 
     const loginUsername = document.getElementById("login_username").value;
     const loginPassword = document.getElementById("login_password").value;
+    const fname = document.getElementById("fname").value;
+    const lname = document.getElementById("lname").value;
+    const address = document.getElementById("address").value;
+    const phoneNo = document.getElementById("phoneNo").value;
+    const age = document.getElementById("age").value;
+
 
     document.getElementById("button_container").innerHTML = "<div>LOADING...</div>";
-
-    fetch("http://localhost:8080/auth/register", {
+    fetch("/auth/registerImage", {
         method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-
-        //make sure to serialize your JSON body
-        body: JSON.stringify({
-            username: loginUsername,
-            password: loginPassword
+        body: formData,
+    })    
+    .then(()=>{
+        fetch("/auth/register", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            //make sure to serialize your JSON body
+            body: JSON.stringify({
+                username: loginUsername,
+                password: loginPassword,
+                fname: fname,
+                lname: lname,
+                address: address,
+                phoneNo: phoneNo,
+                age: age,
+                profile_picture: filenameProfile,
+            })
         })
-        })
-        .then( (response) => { 
-            
+        .then((response)=>{
             if (response.status == 200) {
-                window.location.replace("/");
+                window.location = "/"
             }
-        });
+        })
+    })
 }
 
-if (window.location.href === "http://localhost:8080/signup") {
+if (window.location.pathname === "/signup") {
     document.getElementById("registration_button").addEventListener("click", registrationManagement);
+
+    document.getElementById("login_username").addEventListener("keyup", ()=>{
+        const value = document.getElementById("login_username").value;
+
+        if (value.length > 0 ) {
+            document.getElementById("random-avatar").innerHTML = `<img src="https://api.multiavatar.com/${value}.svg">`;
+        } else {
+            document.getElementById("random-avatar").innerHTML = "<div></div>";
+        }
+    })
+}
+
+if (window.location.pathname === "/profile") {
+    document.getElementById("place-purchase").addEventListener("click", function() {
+        const userId = document.getElementById("user-id").textContent;
+        const cartId = document.getElementById("cartId").textContent;
+        console.log(userId)
+        console.log(cartId);
+        fetch(
+            "/api/finish_purchase", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    cartId: cartId
+                })
+            }
+        )
+    });
 }

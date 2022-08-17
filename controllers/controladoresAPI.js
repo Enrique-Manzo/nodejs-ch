@@ -1,5 +1,4 @@
 import contenedor from "../database/databaseProducts.js";
-import { SQLClientAdmin } from "../database/SQLClient.js";
 import { faker } from "@faker-js/faker";
 import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
 import { fork } from 'child_process';

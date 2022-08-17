@@ -109,6 +109,85 @@ export default class ContenedorMongoDB {
         }
     }
     
+    async findActiveCartsByUserId(userId) {
+        try {
+            await mongoClient.connect();
+        
+            const userDatabase = mongoClient.db("ecommerce");
+        
+            const userCollection = userDatabase.collection("carritos");
+           
+            const collectionObject = await userCollection.findOne({owner_id: userId.toString(), status: "open"});
+        
+            return collectionObject
+        
+        } catch(error) {
+            console.log(error)
+        } finally {
+            await mongoClient.close();
+        }
+    }
+
+    async closeOpenCartById(cartId) {
+        try {
+            await mongoClient.connect();
+        
+            const userDatabase = mongoClient.db("ecommerce");
+        
+            const userCollection = userDatabase.collection("carritos");
+           
+            const collectionObject = await userCollection.updateOne({id: cartId}, {$set: {status: "closed"}})
+        
+            return collectionObject
+        
+        } catch(error) {
+            console.log(error)
+        } finally {
+            await mongoClient.close();
+        }
+    }
+
+    async findProductById(productId) {
+        try {
+            await mongoClient.connect();
+        
+            const userDatabase = mongoClient.db("ecommerce");
+        
+            const userCollection = userDatabase.collection("productos");
+           
+            const collectionObject = await userCollection.findOne({id: productId});
+        
+            return collectionObject
+        
+        } catch(error) {
+            console.log(error)
+        } finally {
+            await mongoClient.close();
+        }
+
+    }
+
+    async updateProductList(cartID, products) {
+        try {
+            await mongoClient.connect();
+        
+            const userDatabase = mongoClient.db("ecommerce");
+        
+            const userCollection = userDatabase.collection("carritos");
+           
+            const collectionObject = await userCollection.updateOne({id: cartID}, {$set: {products: products}})
+        
+            return collectionObject
+        
+        } catch(error) {
+            console.log(error)
+        } finally {
+            await mongoClient.close();
+        }
+
+    }
+
+
     
     // UPDATE
 

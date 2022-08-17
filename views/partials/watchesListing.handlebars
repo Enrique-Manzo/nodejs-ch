@@ -9,11 +9,10 @@
         </h2>
       </div>
     <div id="watches__section" class="row">
-        <!--
+ 
                 {{#each watches}}
                 <div class="{{#if this.featured}}col-md-6 {{else}}col-sm-6 col-xl-3{{/if}}">
                 <div class="box">
-                    <a href="">
                     <div class="img-box">
                         <img src="{{this.image}}" alt="">
                     </div>
@@ -28,26 +27,23 @@
                         </span>
                         </h6>
                     </div>
+                    <div class="shopping_controls">
+                      <i class="fa fa-shopping-cart" aria-hidden="true" id={{this.id}}></i>
+                      <div id="added!{{this.id}}">
+                        <div id="spinner{{this.id}}"></div>
+                      </div>
+                    </div>
                     <div class="new">
                         <span>
                         {{this.tag}}
                         </span>
                     </div>
-                    </a>
                 </div>
                 </div>
                 {{/each}}
-        -->
+        
     </div>
-    <form class="contact_section chat_credentials">
-        <label for="name">Name</label>
-        <input type="text" name="message" id="product_name">
-        <label for="price">Price</label>
-        <input type="number" name="price" id="product_price">
-        <label for="tag">Tag</label>
-        <input type="text" name="tag" id="product_tag">
-        <label for="image">Image URL</label>
-        <input type="text" name="image" id="product_image">
-        <button type="button" id="btn_send_product">SEND</button>
-      </form>
+    {{#if isWatches}}
+      {{>productPostForm}}
+    {{/if}}
 </section>

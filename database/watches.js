@@ -1,4 +1,3 @@
-import { SQLClientAdmin } from "./SQLClient.js";
 import ContenedorMongoDB from "./contenedores/contenedorMongoDB.js";
 
 const mongoDB = new ContenedorMongoDB();

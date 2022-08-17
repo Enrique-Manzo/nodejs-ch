@@ -17,14 +17,14 @@ const storage = multer.diskStorage({
         cb(null, 'uploads')
     },
     filename: function (req, file, cb) {
-        const nombreFinal = `${Date.now()}-audio-${file.originalname}`
+        const nombreFinal = `${Date.now()}-profile-${file.originalname}`
         cb(null, nombreFinal)
     }
 })
 
 const upload = multer({ storage })
 
-const middlewareDeUnArchivo = upload.single('blob')
+const middlewareDeUnArchivo = upload.single('profile')
 const middlewareDeVariosArchivos = upload.array('myFiles')
 
 // ROUTERS
@@ -56,8 +56,12 @@ routerAPI.get("/productos/test", controladoresAPI.getTestProducts);
 
 // CARRITO
 
+routerAPI.get("/user_id", controladoresAPICarrito.getUserId);
+routerAPI.post("/add_to_cart", controladoresAPICarrito.postProductToCart);
+routerAPI.post("/finish_purchase", controladoresAPICarrito.postFinishPurchase);
+
 routerAPI.get("/carrito/:id/productos", controladoresAPICarrito.getAllCartProducts);
-routerAPI.post("/carrito", controladoresAPICarrito.postCart);
+
 routerAPI.post("/carrito/:id", controladoresAPICarrito.postAddProductToCart);
 routerAPI.delete("/carrito/:id", controladoresAPICarrito.deleteCart);
 routerAPI.delete("/carrito/:id/productos/:id_prod", controladoresAPICarrito.deleteCartProduct);
