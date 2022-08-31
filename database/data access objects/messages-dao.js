@@ -1,7 +1,7 @@
 import database from "../contenedores/contenedorMongoDB.js";
 import DataTransferObject from "../data transfer objects/dtos.js";
 
-class messagesDAO {
+export class messagesDAO {
 
     // GETS
     async getAllmessages () {
@@ -35,7 +35,7 @@ class messagesDAO {
 
         await database.insertObject("ecommerce", "messages", dtoMessage)
 
-        return
+        return dtoMessage
     }    
 
 }

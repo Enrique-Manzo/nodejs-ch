@@ -1,6 +1,6 @@
 import database from "../contenedores/contenedorMongoDB.js";
 
-class ProductDAO {
+export class ProductDAO {
 
     // GETS
     async getAllProducts () {
