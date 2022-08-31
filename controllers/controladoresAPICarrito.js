@@ -1,8 +1,9 @@
-import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
-import { ObjectId } from "mongodb";
-const mongo = new ContenedorMongoDB();
 import {mail} from "../communication/emails/sendgridConfig.js";
 import twilio from "twilio";
+import CartManager from "../database/data access objects/carts-dao.js";
+import ProductManager from "../database/data access objects/product-dao.js";
+import SaleManager from "../database/data access objects/sale-dao.js";
+import Cart, { Sale } from "../business/business.js";
 
 const ADMIN_EMAIL = "enq.manzo@gmail.com";
 
@@ -19,50 +20,19 @@ const controladoresAPICarrito = {
         })
     },
 
-    deleteCart: async (req, res) => {
-        
-        const id = req.params.id;
-        
-        contenedorCarrito.deleteCart(parseInt(id))
-        .then(()=>{
-            res.status(200).json({"message": "the selected cart has been emptied."})
-        })
-        .catch((err) => res.status(500).json({"message": err.message}))
-    },
-
     postProductToCart: async (req, res) => {
         const userId = req.body.user_id;
         const productId = parseFloat(req.body.product_id);
-       
+
+        const product = await ProductManager.findProductById(productId);
+      
         try {
-            const product = await mongo.findProductById(productId);
-            const cart = await mongo.findActiveCartsByUserId(userId);
-          
-            if (cart) {
-                cart.products.push(product);
+            Cart.addProductToCart(userId, product)
 
-                await mongo.updateProductList(cart.id, cart.products);
-            
-                res.json({"message": "success"})
-
-            } else {
-                const newCart = {
-                    id: Math.random().toString(36).substring(2, 9),
-                    owner_id: userId.toString(),
-                    date: new Date(),
-                    products: [],
-                    status:"open"
-                }
-
-                newCart.products.push(product);
-
-                await mongo.insertObject("ecommerce", "carritos", newCart);
-
-                res.json({"message": "success"})
-            }
+            res.json({"message": "success"})
             
         } catch(err) {
-            res.json({"error": err})
+            res.json({"error": err.message})
         }
     },
 
@@ -72,8 +42,8 @@ const controladoresAPICarrito = {
         const userId = req.body.userId
 
         try {
-            const cart = await mongo.findActiveCartsByUserId(userId);
-            const user = await mongo.readById("ecommerce", "users", parseFloat(userId));
+            const cart = await CartManager.findActiveCartsByUserId(userId);
+            const user = await database.readById("ecommerce", "users", parseFloat(userId));
             
             const msg = {
                 to: ADMIN_EMAIL,
@@ -87,7 +57,7 @@ const controladoresAPICarrito = {
         
             mail.send(msg);
 
-            await mongo.closeOpenCartById(cartId)
+            await CartManager.closeOpenCartById(cartId)
 
             const client = twilio(process.env.TWILIO_ACCOUNT_ID, process.env.TWILIO_AUTH_TOKEN)
 
@@ -106,6 +76,16 @@ const controladoresAPICarrito = {
             }) 
             .then(message => console.log(message.sid))
 
+            const sale = new Sale(cart);
+
+            const saleData = sale.getSaleData();
+
+            SaleManager.postSale(saleData);
+            
+            for (let productSale in cart.products) {
+                sale.updateStock(productSale.id)
+            }
+
             res.status(200).json({"message": "success"})
 
         } catch(error) {
@@ -115,49 +95,8 @@ const controladoresAPICarrito = {
         
     },
 
-    postAddProductToCart: (req, res)=>{
-
-        const idCarrito = parseInt(req.params.id);
-
-        const productID = req.body.productID;
-
-        contenedorCarrito.addProduct(idCarrito, parseInt(productID))
-        .then(()=>{
-            res.status(200).json({"message": "product added successfully."})
-        })
-        .catch( (err) => {
-            if (err.type === "Not found in db") {
-                res.status(404).json({ error: error.message })
-            } else {
-                res.status(500).json({ error: error.message })
-            }
-        })
-
-
-    },
-
-    getAllCartProducts: (req, res) => {
-        const idCarrito = parseInt(req.params.id);
-        
-        contenedorCarrito.getAllCartProducts(idCarrito)
-        .then((products)=>{
-            res.status(200).json({products})
-        })
-        .catch((err) => {
-            res.status(500).json({"error": err})
-        })
-    },
-
     deleteCartProduct: (req, res) => {
-
-        const idCarrito = parseInt(req.params.id);
-        const idProducto = parseInt(req.params.id_prod);
-
-        contenedorCarrito.deleteCartProduct(idCarrito, idProducto)
-        .then((cart)=>{
-            res.status(200).json(cart)
-        })
-    
+        return
     }
 };
 

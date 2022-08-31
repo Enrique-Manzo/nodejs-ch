@@ -1,12 +1,10 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import ContenedorMongoDB from "../../database/contenedores/contenedorMongoDB.js";
+import database from "../../database/contenedores/contenedorMongoDB.js";
 import bcrypt from "bcrypt";
 import {mail} from "../../communication/emails/sendgridConfig.js";
 
 const ADMIN_EMAIL = "enq.manzo@gmail.com";
-
-const mongo = new ContenedorMongoDB();
 
 async function registrarUsuario(datos) {
     
@@ -34,7 +32,7 @@ async function registrarUsuario(datos) {
 
     mail.send(msg);
 
-    const user = await mongo.insertObject("ecommerce", "users", datos)
+    const user = await database.insertObject("ecommerce", "users", datos)
 
     return user
 }
@@ -65,7 +63,7 @@ passport.use("registration", new Strategy(
 passport.use("login", new Strategy(
     async (username, password, done) => {
         
-        const user = await mongo.findByUsername("ecommerce", "users", username)
+        const user = await database.findByUsername("ecommerce", "users", username)
         
         if (user) {
             bcrypt.compare(password, user.password, function(err, result) {

@@ -1,13 +1,11 @@
-import ContenedorMongoDB from "./contenedores/contenedorMongoDB.js";
-
-const mongoDB = new ContenedorMongoDB();
+import ProductManager from "./data access objects/product-dao.js";
 
 export async function addWatch(watch) {
-    await mongoDB.insertObject("ecommerce", "productos", watch);
+    await ProductManager.addProduct(watch);
 }
 
 export async function getWatches() {
-    const data = await mongoDB.readAll("ecommerce", "productos");
+    const data = await ProductManager.getAllProducts();
 
     return data
 }

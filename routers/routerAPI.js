@@ -1,14 +1,7 @@
 import { Router } from "express";
 import controladoresAPI from "../controllers/controladoresAPI.js";
 import controladoresAPICarrito from "../controllers/controladoresAPICarrito.js";
-import contenedorCarrito from "../database/databaseCarritos.js";
 import multer from "multer";
-import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
-//import { database } from "firebase-admin";
-//import { Collection } from "mongoose";
-import logger from "../loggers/logger.js";
-
-const mongo = new ContenedorMongoDB();
 
 // MULTER
 
@@ -60,11 +53,6 @@ routerAPI.get("/user_id", controladoresAPICarrito.getUserId);
 routerAPI.post("/add_to_cart", controladoresAPICarrito.postProductToCart);
 routerAPI.post("/finish_purchase", controladoresAPICarrito.postFinishPurchase);
 
-routerAPI.get("/carrito/:id/productos", controladoresAPICarrito.getAllCartProducts);
-
-routerAPI.post("/carrito/:id", controladoresAPICarrito.postAddProductToCart);
-routerAPI.delete("/carrito/:id", controladoresAPICarrito.deleteCart);
-routerAPI.delete("/carrito/:id/productos/:id_prod", controladoresAPICarrito.deleteCartProduct);
 
 // CHILD PROCESSES
 

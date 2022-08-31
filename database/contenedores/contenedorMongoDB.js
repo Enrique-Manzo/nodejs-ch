@@ -1,6 +1,6 @@
 import mongoClient from "../MongoDB/mongo.js";
 
-export default class ContenedorMongoDB {
+class ContenedorMongoDB {
 
     // CREATE
 
@@ -108,8 +108,8 @@ export default class ContenedorMongoDB {
             await mongoClient.close();
         }
     }
-    
-    async findActiveCartsByUserId(userId) {
+
+    async findCartsOnConditions (conditions) {
         try {
             await mongoClient.connect();
         
@@ -117,8 +117,8 @@ export default class ContenedorMongoDB {
         
             const userCollection = userDatabase.collection("carritos");
            
-            const collectionObject = await userCollection.findOne({owner_id: userId.toString(), status: "open"});
-        
+            const collectionObject = await userCollection.findOne(conditions);
+          
             return collectionObject
         
         } catch(error) {
@@ -128,44 +128,7 @@ export default class ContenedorMongoDB {
         }
     }
 
-    async closeOpenCartById(cartId) {
-        try {
-            await mongoClient.connect();
-        
-            const userDatabase = mongoClient.db("ecommerce");
-        
-            const userCollection = userDatabase.collection("carritos");
-           
-            const collectionObject = await userCollection.updateOne({id: cartId}, {$set: {status: "closed"}})
-        
-            return collectionObject
-        
-        } catch(error) {
-            console.log(error)
-        } finally {
-            await mongoClient.close();
-        }
-    }
-
-    async findProductById(productId) {
-        try {
-            await mongoClient.connect();
-        
-            const userDatabase = mongoClient.db("ecommerce");
-        
-            const userCollection = userDatabase.collection("productos");
-           
-            const collectionObject = await userCollection.findOne({id: productId});
-        
-            return collectionObject
-        
-        } catch(error) {
-            console.log(error)
-        } finally {
-            await mongoClient.close();
-        }
-
-    }
+    // UPDATE
 
     async updateProductList(cartID, products) {
         try {
@@ -186,10 +149,6 @@ export default class ContenedorMongoDB {
         }
 
     }
-
-
-    
-    // UPDATE
 
     async updateOne(database, collection, query, newValues) {
         try {
@@ -230,3 +189,7 @@ export default class ContenedorMongoDB {
     }
 
 }
+
+const database = new ContenedorMongoDB();
+
+export default database;

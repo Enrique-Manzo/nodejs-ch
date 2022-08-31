@@ -1,17 +1,17 @@
-import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
-
-const mongoDB = new ContenedorMongoDB();
+import ProductManager from "../database/data access objects/product-dao.js";
+import CartManager from "../database/data access objects/carts-dao.js";
+import database from "../database/contenedores/contenedorMongoDB.js";
 
 const controladoresWeb = {
     index: async (req, res) => {
         const isWatches = req.path == "/watches"
         
-        res.render("main", {layout: "index", name: req.session.passport?.user?.fname, watches: await mongoDB.readAll("ecommerce", "productos"), isWatches: isWatches})
+        res.render("main", {layout: "index", name: req.session.passport?.user?.fname, watches: await ProductManager.getAllProducts(), isWatches: isWatches})
     },
     watches: async (req, res) => {
         const isWatches = req.path == "/watches"
 
-        res.render("watches", {layout: "index", name: req.session.passport?.user?.fname, watches: await mongoDB.readAll("ecommerce", "productos"), isWatches: isWatches})},
+        res.render("watches", {layout: "index", name: req.session.passport?.user?.fname, watches: await ProductManager.getAllProducts(), isWatches: isWatches})},
     about: (req, res) => {res.render("about", {layout: "index", name: req.session.passport?.user?.fname})},
     contact: (req, res) => {res.render("chat", {layout: "index", name: req.session.passport?.user?.fname})},
     login: (req, res) => {res.render("login", {layout: "index", name: req.session.passport?.user?.fname})},
@@ -19,13 +19,15 @@ const controladoresWeb = {
     logout: async (req, res) => {
         req.session.destroy()
 
-        res.render("main", {layout: "index", watches: await mongoDB.readAll("ecommerce", "productos")})
+        res.render("main", {layout: "index", watches: await database.readAll("ecommerce", "productos")})
     },
     profile: async (req, res) => {
-        if (req.session.passport?.user?.id != undefined) {
+        
+        if (req.session.passport?.user?.id) {
             const userID = req.session?.passport?.user?.id;
-            const user = await mongoDB.readById("ecommerce", "users", userID)
-            let activeCarts = await mongoDB.findActiveCartsByUserId(userID);
+            const user = await database.readById("ecommerce", "users", userID)
+            let activeCarts = await CartManager.findActiveCartsByUserId(userID);
+            
             if (activeCarts == null) {
                 activeCarts = {};
                 activeCarts.id = "";

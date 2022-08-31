@@ -1,15 +1,11 @@
-import contenedor from "../database/databaseProducts.js";
 import { faker } from "@faker-js/faker";
-import ContenedorMongoDB from "../database/contenedores/contenedorMongoDB.js";
 import { fork } from 'child_process';
-
-
-const mongo = new ContenedorMongoDB();
+import ProductManager from "../database/data access objects/product-dao.js";
 
 const controladoresAPI = {
     
     getAllProducts: async (req, res) => {
-        const products = await SQLClientAdmin.select("*").from("watches")
+        const products = await ProductManager.getAllProducts();
         res.json(products)
         },
     
