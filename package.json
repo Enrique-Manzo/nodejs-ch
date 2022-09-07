@@ -4,6 +4,7 @@
     "@sendgrid/mail": "^7.7.0",
     "artillery": "^2.0.0-22",
     "autocannon": "^7.9.0",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
@@ -46,7 +47,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "start:dev": "nodemon server.js",
-    "initializeTable": "node database/createTables.js"
+    "initializeTable": "node database/createTables.js",
+    "mochatest": "mocha tests/test.js"
   },
   "keywords": [],
   "author": "",

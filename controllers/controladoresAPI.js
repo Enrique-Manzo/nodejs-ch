@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { fork } from 'child_process';
+import { Product } from "../business/business.js";
 import ProductManager from "../database/data access objects/product-dao.js";
 
 const controladoresAPI = {
@@ -10,48 +11,64 @@ const controladoresAPI = {
         },
     
     getRandomProduct: async (req, res)=>{
-        const products = await SQLClientAdmin.select("*").from("watches")
-        const randomProduct = products[Math.floor(Math.random() * products.length)]
-        res.json(randomProduct)
+        try {
+            const randomProduct = await ProductManager.getRandomProduct();
+            res.status(200).json(randomProduct)
+        } catch(err) {
+            res.json({"error": err.message})
+        }
+        
     },
 
     getProductById: async (req, res) => {
         
         const id = parseInt(req.params.id);
         
-        const product = await SQLClientAdmin.select("*").from("watches").where({id: id})
+        const product = await ProductManager.findProductById(id);
         
         if (!product) {
-            res.json({"message": "item not found"})
+            res.status(404).json({"message": "item not found"})
         } else {
-            res.json(product)
+            res.status(200).json(product)
         }
     },
 
     postProduct: async (req, res) => {
         
         const productData = req.body;
-
-        const result = await SQLClientAdmin.insert(productData).into("watches");
-        res.json(result)
+        try {
+            console.log(productData)
+            const result = await ProductManager.addProduct(productData);
+            res.status(200).json(result)
+        } catch (err) {
+            res.json({"error": err.message})
+        }
+        
     },
 
     deleteProduct: async (req, res) => {
         const id = parseInt(req.params.id);
-
-        await SQLClientAdmin.delete().from("watches").where({id: id});
+        try {
+            await ProductManager.deleteById(id)
        
-        res.json({"message": "product deletion successful."})
-
+            res.status(200).json({"message": "product deletion successful."})
+        } catch (err) {
+            res.json({"error": err.message})
+        }
     },
     
     updateProduct: async (req, res) => {
         const id = parseInt(req.params.id);
         const data = req.body;
 
-        await SQLClientAdmin.update(data).from("watches").where({id: id})
+        try {
+            await ProductManager.updateById(id, data);
 
-        res.json({"message": "Update successful."})
+            res.status(200).json({"message": "Update successful."})
+        } catch (err) {
+            res.json({"error": err.message})
+        }
+        
         
     },
 

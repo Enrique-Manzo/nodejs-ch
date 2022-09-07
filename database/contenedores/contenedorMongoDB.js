@@ -86,6 +86,25 @@ class ContenedorMongoDB {
         }
     }
 
+    async findRandom(database, collection) {
+        try {
+            await mongoClient.connect();
+        
+            const userDatabase = mongoClient.db(database);
+        
+            const userCollection = userDatabase.collection(collection);
+        
+            const collectionObject = await userCollection.aggregate({$sample: {size: 1}});
+        
+            return collectionObject
+        
+        } catch(error) {
+            console.log(error)
+        } finally {
+            await mongoClient.close();
+        }
+    }
+
     async findByUsername(database, collection, username) {
         try {
             await mongoClient.connect();
@@ -178,7 +197,7 @@ class ContenedorMongoDB {
         
             const userCollection = userDatabase.collection(collection);
         
-            await userCollection.deleteOne(query, newValues);
+            await userCollection.deleteOne(query, query);
     
         } catch(error) {
             console.log(error)

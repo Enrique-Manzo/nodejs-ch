@@ -1,6 +1,6 @@
-import { CartDAO } from "../data access objects/carts-dao";
-import { UsersDAO } from "../data access objects/users-dao";
-import { SaleDAO } from "../data access objects/sale-dao";
+import { CartDAO } from "../data access objects/carts-dao.js";
+import { UsersDAO } from "../data access objects/users-dao.js";
+import { SaleDAO } from "../data access objects/sale-dao.js";
 
 export default class DataAccessObject {
     
