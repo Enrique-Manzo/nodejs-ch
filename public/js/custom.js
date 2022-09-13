@@ -145,7 +145,7 @@ if (window.location.href === "http://localhost:8080/chat") {
 
 // NEW CHAT APP
 
-if (window.location.href === "http://localhost:8080/chat") {
+if (window.location.href === "/chat") {
     socket.emit("requestMessages")
     socket.on("conexionOK", data => {
         document.getElementById("chat_messages_new").innerHTML = data.messages.map(message =>        
@@ -173,7 +173,7 @@ const loginManagement = () => {
 
     document.getElementById("button_container").innerHTML = "<div>LOADING...</div>";
 
-    fetch("http://localhost:8080/auth/login", {
+    fetch("/auth/login", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
