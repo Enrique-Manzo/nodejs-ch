@@ -1,5 +1,5 @@
 import ProductManager from "../database/data access objects/product-dao.js";
-
+import { v4 } from "uuid";
 
     
 export async function getAllProducts() {
@@ -30,42 +30,40 @@ export async function getProductById({id}) {
 export async function postProduct({data}) {
     
     try {
-        console.log(data)
+        data.id = v4();
         const result = await ProductManager.addProduct(data);
-        return result
+        return data
     } catch (err) {
         return {"error": err.message}
     }
     
 }
 
+export async function deleteProduct({id}) {;
+    try {
+        await ProductManager.deleteById(parseInt(id))
+    
+        return {"description": "product deletion successful."}
+    } catch (err) {
+        return{"description": err.message}
+    }
+}
+
+
+export async function updateProduct({id, data}) {
+    const productId = parseInt(id);
+
+    try {
+        await ProductManager.updateById(productId, data);
+
+        return {"description": "Update successful."}
+    } catch (err) {
+        return {"description": err.message}
+    }
+    
+    
+}
 /*
-deleteProduct: async (req, res) => {
-    const id = parseInt(req.params.id);
-    try {
-        await ProductManager.deleteById(id)
-    
-        res.status(200).json({"message": "product deletion successful."})
-    } catch (err) {
-        res.json({"error": err.message})
-    }
-},
-
-updateProduct: async (req, res) => {
-    const id = parseInt(req.params.id);
-    const data = req.body;
-
-    try {
-        await ProductManager.updateById(id, data);
-
-        res.status(200).json({"message": "Update successful."})
-    } catch (err) {
-        res.json({"error": err.message})
-    }
-    
-    
-},
-
 getTestProducts: async (req, res) => {
     console.log("test")
     const productArray = [];
