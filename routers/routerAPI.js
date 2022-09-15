@@ -58,10 +58,6 @@ routerAPI.post("/finish_purchase", controladoresAPICarrito.postFinishPurchase);
 
 routerAPI.get("/randoms", controladoresAPI.getRandoms);
 
-// FILES
-
-routerAPI.post("/audiopost", middlewareDeUnArchivo, controladoresAPI.postAudio);
-
 // AUTHENTICATION
 
 routerAPI.post("/login", controladoresAPI.postLogin)

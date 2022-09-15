@@ -19,6 +19,7 @@ import cluster from 'cluster';
 import os from 'os';
 import compression from "compression";
 import logger from "./loggers/logger.js";
+import { graphqlMiddleware } from "./middlewares/graphql/graphqlMiddleware.js";
 
 // PATHS
 import * as path from 'path'; //const path = require('path');
@@ -140,6 +141,8 @@ app.use("/info", compression(), (req, res)=> {
      
     res.json(info)
 })
+
+app.use("/graphql", graphqlMiddleware)
 
 app.all('*', (req, res) => {
     const { url, method } = req

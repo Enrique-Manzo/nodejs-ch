@@ -94,8 +94,8 @@ class ContenedorMongoDB {
         
             const userCollection = userDatabase.collection(collection);
         
-            const collectionObject = await userCollection.aggregate({$sample: {size: 1}});
-        
+            const collectionObject = await userCollection.aggregate([{$sample: {size: 1}}]);
+            
             return collectionObject
         
         } catch(error) {

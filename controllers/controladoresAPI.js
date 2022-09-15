@@ -13,6 +13,7 @@ const controladoresAPI = {
     getRandomProduct: async (req, res)=>{
         try {
             const randomProduct = await ProductManager.getRandomProduct();
+            console.log(randomProduct)
             res.status(200).json(randomProduct)
         } catch(err) {
             res.json({"error": err.message})
@@ -88,12 +89,6 @@ const controladoresAPI = {
         
 
         res.json(productArray);
-    },
-
-    // Esto es para testear un proyecto separado en el que estoy trabajando
-    postAudio: async (req, res) => {
-        console.log("hit")
-        console.log(req.file)
     },
 
     postLogin: async (req, res) => {
